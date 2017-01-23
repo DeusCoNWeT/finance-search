@@ -81,7 +81,7 @@ Example:
         <search-company symbol="{{company_symbol}}"></search-company>
         <div class="container">
             <template is="dom-if" if="{{company_symbol}}">
-                <finance-chart symbol="[[company_symbol]]" historical="{{data}}" on-finance-chart-ready="checkEmpty" start="2016-9-31">
+                <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" accuracy="10" on-finance-chart-ready="checkEmpty" start="2016-9-31">
                 <template is="dom-if" if="{{emptyData}}">
                   <div class="horizontal layout center-center post">
                     <p>Utiliza la barra de busqueda para encontrar una empresa</p>
