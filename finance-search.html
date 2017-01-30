@@ -109,7 +109,7 @@ Example:
                 <p>No hay datos sobre {{fullname}}</p>
             </div>
             <template is="dom-if" if="{{company_symbol}}">
-                <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty" on-finance-chart-error="_errorHandler" accuracy=15 start="2016-9-31">
+                <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty" on-finance-chart-error="_errorHandler" start="2016-9-31">
             </template>
             <template is="dom-if" if="{{!company_symbol}}">
                 <div class="horizontal layout center-center post" hidden>
