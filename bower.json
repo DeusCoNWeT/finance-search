@@ -21,7 +21,8 @@
     "polymer": "Polymer/polymer#^1.2.0",
     "finance-chart": "^0.0.9",
     "search-company": "*",
-    "finance-historical": "^0.9.1"
+    "finance-historical": "^0.9.1",
+    "paper-spinner": "PolymerElements/paper-spinner#^1.2.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
