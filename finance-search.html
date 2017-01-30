@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../search-company/search-company.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -44,9 +45,11 @@ Example:
           border-radius: 2px;
           box-sizing: content-box;
           border: 1px solid #eceff1;
+          position: relative;
         }
         .container{
           margin:8px;
+          position:relative;
         }
         finance-chart {
           box-sizing: content-box;
@@ -76,20 +79,40 @@ Example:
           background-color:#fefefe;
           border-radius:2px;
         }
+        .empty {
+          position:absolute;
+          width: 100%;
+          padding:0;
+          margin:0 auto;
+        }
+        .loading {
+          position:absolute;
+          top:0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0,0,0,0.5);
+          z-index:1000;
+          border-radius: 2px;
+        }
     </style>
-    <div class="vertical layout">
-        <search-company symbol="{{company_symbol}}"></search-company>
+    <div class="vertical layout box">
+      <template if="{{_loading}}" is="dom-if">
+        <template if="{{company_symbol}}" is="dom-if">
+          <div class="loading vertical layout center-center">
+            <paper-spinner active></paper-spinner>
+          </div>
+        </template>
+      </template>
+        <search-company symbol="{{company_symbol}}" company="{{fullname}}"></search-company>
         <div class="container">
+            <div id="empty" class="horizontal layout center-center post empty" hidden>
+                <p>There are not data about {{fullname}}</p>
+            </div>
             <template is="dom-if" if="{{company_symbol}}">
-                <finance-chart symbol="[[company_symbol]]" historical="{{data}}" on-finance-chart-ready="checkEmpty" start="2016-9-31">
-                <template is="dom-if" if="{{emptyData}}">
-                  <div class="horizontal layout center-center post">
-                    <p>Utiliza la barra de busqueda para encontrar una empresa</p>
-                  </div>
-                </template>
+                <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty" on-finance-chart-error="_errorHandler" start="2016-9-31">
             </template>
             <template is="dom-if" if="{{!company_symbol}}">
-                <div class="horizontal layout center-center post">
+                <div class="horizontal layout center-center post" hidden>
                     <p>Utiliza la barra de busqueda para encontrar una empresa</p>
                 </div>
             </template>
@@ -103,10 +126,48 @@ Example:
           is: 'finance-search',
 
           properties: {
+            emptyData: {
+              type: Boolean,
+              value:false
+            },
+            data: {
+              type:Array,
+              value: function(){return []},
+              notify:true
+            },
+            company_symbol: {
+              type:String,
+              observer: 'resetEmpty'
+            },
+            fullname: {
+              type:String,
+              observer: '_setEmpty'
+            }
           },
-          checkEmpty: function(){
-            this.emptyData = this.data && this.data.length == 0;
-          }
+          _setEmpty: function(){
+            this.$.emprt.hidden = true;
+          },
+          resetEmpty: function(newvalue, oldvalue){
+            this.$.empty.hidden  = true;
+            if (newvalue && newvalue !== oldvalue){
+              this._loading = true;
+            } else {
+              this._loading = false;
+            }
+          },
+          checkEmpty: function(event,detail){
+            this._loading = false;
+            if (detail.data && detail.data.length == 0){
+              this.$.empty.hidden = false;
+            } else {
+              this.$.empty.hidden = true;
+            }
+          },
+          _errorHandler: function(){
+            this.$.empty.hidden = false;
+            this._loading = false;
+            console.log('Hubo algun error');
+          },
       });
   </script>
 </dom-module>
