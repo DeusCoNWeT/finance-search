@@ -19,9 +19,9 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "finance-chart": "^0.0.9",
+    "finance-chart": "*",
     "search-company": "*",
-    "finance-historical": "^0.9.1",
+    "finance-historical": "*",
     "paper-spinner": "PolymerElements/paper-spinner#^1.2.1"
   },
   "devDependencies": {

@@ -34,14 +34,13 @@ Example:
 
 <dom-module id="finance-search">
   <template>
-    <style include="iron-flex iron-flex-alignment">
+      <style include="iron-flex iron-flex-alignment">
         :host {
           display: inline-block;
-          box-sizing: border-box;
+          box-sizing: content-box;
           width: var(--finance-search-width, 400px);
-          height: var(--finance-search-width, auto);
-          min-height: 250px;
-          min-width: 400px;
+          height: var(--finance-search-width, 260px);
+          min-height: 260px;
           background-color:#3F51B5;
           border-radius: 2px;
           box-sizing: content-box;
@@ -96,81 +95,79 @@ Example:
           border-radius: 2px;
         }
     </style>
-<div class="vertical layout box">
-
-  <search-company symbol="{{company_symbol}}" company="{{fullname}}"></search-company>
-  <div class="container">
-    <div id="empty" class="horizontal layout center-center post empty" hidden>
-      <p>No hay datos sobre {{fullname}}</p>
+    <div class="vertical layout box">
+      <template if="{{_loading}}" is="dom-if">
+        <template if="{{company_symbol}}" is="dom-if">
+          <div class="loading vertical layout center-center">
+            <paper-spinner active></paper-spinner>
+          </div>
+        </template>
+      </template>
+        <search-company symbol="{{company_symbol}}" company="{{fullname}}"></search-company>
+        <div class="container">
+            <div id="empty" class="horizontal layout center-center post empty" hidden>
+                <p>No hay datos sobre {{fullname}}</p>
+            </div>
+            <template is="dom-if" if="{{company_symbol}}">
+                <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty" on-finance-chart-error="_errorHandler" start="2016-9-31">
+            </template>
+            <template is="dom-if" if="{{!company_symbol}}">
+                <div class="horizontal layout center-center post">
+                    <p>Utiliza la barra de busqueda para encontrar una empresa</p>
+                </div>
+            </template>
+        </div>
     </div>
-    <template is="dom-if" if="{{company_symbol}}">
-      <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty"
-        on-finance-chart-error="_errorHandler" delay=2000 start="2016-9-31">
-    </template>
-    <template is="dom-if" if="{{!company_symbol}}">
-      <div class="horizontal layout center-center post" hidden>
-        <p>Utiliza la barra de busqueda para encontrar una empresa</p>
-      </div>
-    </template>
-  </div>
-  <template if="{{_loading}}" is="dom-if">
-    <template if="{{company_symbol}}" is="dom-if">
-      <div class="loading vertical layout center-center">
-        <paper-spinner active></paper-spinner>
-      </div>
-    </template>
+
   </template>
-</div>
 
-</template>
+  <script>
+      Polymer({
+          is: 'finance-search',
 
-<script>
-    Polymer({
-      is: 'finance-search',
-
-      properties: {
-        emptyData: {
-          type: Boolean,
-          value: false
-        },
-        data: {
-          type: Array,
-          value: function () { return [] },
-          notify: true
-        },
-        company_symbol: {
-          type: String,
-          observer: 'resetEmpty'
-        },
-        fullname: {
-          type: String,
-          observer: '_setEmpty'
-        }
-      },
-      _setEmpty: function () {
-        this.$.empty.hidden = true;
-      },
-      resetEmpty: function (newvalue, oldvalue) {
-        this.$.empty.hidden = true;
-        if (newvalue && newvalue !== oldvalue) {
-          this._loading = true;
-        } else {
-          this._loading = false;
-        }
-      },
-      checkEmpty: function (event, detail) {
-        this._loading = false;
-        if (detail.data && detail.data.length == 0) {
-          this.$.empty.hidden = false;
-        } else {
-          this.$.empty.hidden = true;
-        }
-      },
-      _errorHandler: function () {
-        this.$.empty.hidden = false;
-        this._loading = false;
-        console.log('Hubo algun error');
-      },
-    });
+          properties: {
+            emptyData: {
+              type: Boolean,
+              value:false
+            },
+            data: {
+              type:Array,
+              value: function(){return []},
+              notify:true
+            },
+            company_symbol: {
+              type:String,
+              observer: 'resetEmpty'
+            },
+            fullname: {
+              type:String,
+              observer: '_setEmpty'
+            }
+          },
+          _setEmpty: function(){
+            this.$.empty.hidden = true;
+          },
+          resetEmpty: function(newvalue, oldvalue){
+            this.$.empty.hidden  = true;
+            if (newvalue && newvalue !== oldvalue){
+              this._loading = true;
+            } else {
+              this._loading = false;
+            }
+          },
+          checkEmpty: function(event,detail){
+            this._loading = false;
+            if (detail.data && detail.data.length == 0){
+              this.$.empty.hidden = false;
+            } else {
+              this.$.empty.hidden = true;
+            }
+          },
+          _errorHandler: function(){
+            this.$.empty.hidden = false;
+            this._loading = false;
+            console.log('Hubo algun error');
+          },
+      });
   </script>
 </dom-module>
