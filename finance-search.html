@@ -109,7 +109,7 @@ Example:
                 <p>No hay datos sobre {{fullname}}</p>
             </div>
             <template is="dom-if" if="{{company_symbol}}">
-                <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty" on-finance-chart-error="_errorHandler" start="2016-9-31">
+                <finance-chart symbol="[[company_symbol]]" delay="{{delay}}" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty" on-finance-chart-error="_errorHandler" start="2016-9-31">
             </template>
             <template is="dom-if" if="{{!company_symbol}}">
                 <div class="horizontal layout center-center post">
@@ -142,6 +142,10 @@ Example:
             fullname: {
               type:String,
               observer: '_setEmpty'
+            },
+            delay:{
+              type:Number,
+              value:5000
             }
           },
           _setEmpty: function(){
