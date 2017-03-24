@@ -116,7 +116,7 @@ Example:
         </div>
         <template is="dom-if" if="{{company_symbol}}">
           <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty"
-            on-finance-chart-error="_errorHandler" accuracy=15 start="2016-9-31">
+            on-finance-chart-error="_errorHandler" on-finance-chart-reload="_reloading" accuracy="[[accuracy]]" start="2016-9-31">
         </template>
         <template is="dom-if" if="{{!company_symbol}}">
           <div class="horizontal layout center-center post">
@@ -149,6 +149,10 @@ Example:
         fullname: {
           type: String,
           observer: '_setEmpty'
+        },
+        accuracy: {
+          type: Number,
+          value: 25
         }
       },
       _setEmpty: function () {
@@ -175,10 +179,10 @@ Example:
         this._loading = false;
         console.log('Hubo algun error');
       },
-      reload: function () {
+      _reloading: function () {
         this._loading = true;
-        this.$$('finance-chart').reload();
       },
+      
     });
   </script>
 </dom-module>
