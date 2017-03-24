@@ -122,7 +122,7 @@ Example:
         </div>
         <template is="dom-if" if="{{company_symbol}}">
           <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty"
-            on-finance-chart-error="_errorHandler" start="2016-9-31">
+            on-finance-chart-error="_errorHandler" on-finance-chart-reload="_reloading" start="2016-9-31">
         </template>
         <template is="dom-if" if="{{!company_symbol}}">
           <div class="horizontal layout center-center post">
@@ -183,6 +183,9 @@ Example:
         this.$.empty.hidden = false;
         this._loading = false;
         console.log('Hubo algun error');
+      },
+      _reloading: function(){
+        this._loading = true;
       },
       decrease_maintenance: function () {
         var a = 1;
