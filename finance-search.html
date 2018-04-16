@@ -63,6 +63,7 @@ Example:
           margin: auto 0;
         }
       }
+      
       /*finance-chart /deep/ .front {
           border:none;
         }*/
@@ -116,7 +117,7 @@ Example:
         </div>
         <template is="dom-if" if="{{company_symbol}}">
           <finance-chart symbol="[[company_symbol]]" current="{{company}}" historical="{{data}}" on-finance-chart-ready="checkEmpty"
-            on-finance-chart-error="_errorHandler" uptimeprob="50" on-finance-chart-reload="_reloading" start="2016-9-31"></finance-chart>
+            on-finance-chart-error="_errorHandler" uptimeprob="100" on-finance-chart-reload="_reloading" start="2016-9-31"></finance-chart>
         </template>
         <template is="dom-if" if="{{!company_symbol}}">
           <div class="horizontal layout center-center post">
